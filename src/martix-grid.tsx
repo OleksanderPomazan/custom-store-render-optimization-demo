@@ -1,10 +1,9 @@
 import { CSSProperties } from "react";
 
 import { MAX_CELL_VALUE } from "./matrix-store";
-import { useMatrixCellValue, useMatrixSize } from "./matrix-store-provider";
+import { useMatrixCellValue, useMatrixSize } from "./matrix-store-hooks";
 
 import invertColor from 'invert-color'
-
 
 const palette =  [
   "#FF0000", // Red

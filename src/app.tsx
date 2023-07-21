@@ -1,7 +1,5 @@
 
-import {
-  createMatrixStore
-} from "./matrix-store";
+import { createMatrixStore } from "./matrix-store";
 import { MatrixStoreProvider } from "./matrix-store-provider";
 import { MatrixGrid } from "./martix-grid";
 

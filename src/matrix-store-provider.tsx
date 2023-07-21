@@ -1,7 +1,7 @@
-import {  ReactNode, createContext, useContext, useEffect, useSyncExternalStore } from "react"
+import {  ReactNode, createContext, useEffect } from "react"
 import { MatrixStore, UpdatesScheduleOptions, scheduleStoreUpdates } from "./matrix-store"
 
-const MatrixStoreContext = createContext<MatrixStore | null>(null)
+export const MatrixStoreContext = createContext<MatrixStore | null>(null)
 
 type Props = {
   store: MatrixStore
@@ -16,7 +16,7 @@ export const MatrixStoreProvider = (props: Props) => {
     children = null
   } = props
 
-  useEffect(() => scheduleStoreUpdates(store, { fractionOfCellsToUpdate, updateFrequencyMs }), [fractionOfCellsToUpdate, updateFrequencyMs])
+  useEffect(() => scheduleStoreUpdates(store, { fractionOfCellsToUpdate, updateFrequencyMs }), [store, fractionOfCellsToUpdate, updateFrequencyMs])
 
   return (
     <MatrixStoreContext.Provider value={store}>
@@ -25,26 +25,4 @@ export const MatrixStoreProvider = (props: Props) => {
   )
 }
 
-const useMatrixStore = () => {
-  const matrixStore = useContext(MatrixStoreContext)
-  
-  if (matrixStore === null) {
-    throw new Error('Wrap component with MatrixStoreProvider')
-  }
-
-  return matrixStore
-}
-
-export const useMatrixCellValue = (x: number, y: number) => {
-  const matrixStore = useMatrixStore()
-
-  const cellValue = useSyncExternalStore(
-    (subscriber) => matrixStore.subscribeToCell([x, y], subscriber), 
-    () => matrixStore.getCellValue([x, y])
-  )
-
-  return cellValue
-}
-
-export const useMatrixSize = () => useMatrixStore().getSize()
 
