@@ -1,5 +1,3 @@
-
-
 export const MAX_CELL_VALUE = 100
 
 const randomCellValue = () => Math.random() * MAX_CELL_VALUE
@@ -77,7 +75,7 @@ export type UpdatesScheduleOptions = {
 
 export const scheduleStoreUpdates = (store: MatrixStore, options: UpdatesScheduleOptions = {} ) => {
   const { updateFrequencyMs = 1, fractionOfCellsToUpdate = 0.01 } = options
-  
+
   let timeoutId: number
 
   const callback = () => {
