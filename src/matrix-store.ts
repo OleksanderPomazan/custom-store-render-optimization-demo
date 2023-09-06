@@ -1,17 +1,27 @@
 export const MAX_CELL_VALUE = 100
+type RGB = [number,number,number]
 
-const randomCellValue = () => Math.random() * MAX_CELL_VALUE
 
-const createRandomArray = (length: number) => {
-  return Array.from({ length }, () => randomCellValue())
-}
 
-const createMatrix = (size: { rows: number, columns: number }) => {
-  return Array.from({ length: size.columns }, () => createRandomArray(size.rows))
-}
+type Matrix<T> = T[][]
 
-export const createMatrixStore = (size: { rows: number, columns: number } = { rows: 0, columns: 0}) => {
-  const matrix = createMatrix(size)
+// const randomCellValue = () => Math.random() * MAX_CELL_VALUE
+
+// const createRandomArray = (length: number) => {
+//   return Array.from({ length }, () => randomCellValue())
+// }
+
+// const createMatrix = (size: { rows: number, columns: number }) => {
+//   return Array.from({ length: size.columns }, () => createRandomArray(size.rows))
+// }
+
+import image from './paintings-data/example.json'
+
+type Value = RGB
+export const createMatrixStore = (initialMatrix: Matrix<Value> = image as Matrix<RGB>) => {
+  const matrix: Matrix<RGB> = initialMatrix
+
+  console.log(matrix)
 
   const getSize = () => {
     return { rows: matrix[0].length ?? 0, columns: matrix.length }
@@ -21,7 +31,7 @@ export const createMatrixStore = (size: { rows: number, columns: number } = { ro
     return matrix[y][x]
   }
 
-  type Subscriber = (value: number) => void
+  type Subscriber = (value: Value) => void
   
   const subscribers = new Map<string, Subscriber[]>()
 
@@ -45,7 +55,7 @@ export const createMatrixStore = (size: { rows: number, columns: number } = { ro
     }
   })
 
-  const updateCells = (replacements: [[number, number], number][]) => {
+  const updateCells = (replacements: [[number, number], Value][]) => {
     for (const [coordinates, updatedValue] of replacements) {
       const [x, y] = coordinates
       
@@ -73,34 +83,34 @@ export type UpdatesScheduleOptions = {
   fractionOfCellsToUpdate?: number
 }
 
-export const scheduleStoreUpdates = (store: MatrixStore, options: UpdatesScheduleOptions = {} ) => {
-  const { updateFrequencyMs = 1, fractionOfCellsToUpdate = 0.01 } = options
+// export const scheduleStoreUpdates = (store: MatrixStore, options: UpdatesScheduleOptions = {} ) => {
+//   const { updateFrequencyMs = 1, fractionOfCellsToUpdate = 0.01 } = options
 
-  let timeoutId: number
+//   let timeoutId: number
 
-  const callback = () => {
-    const {rows, columns} = store.getSize()
+//   const callback = () => {
+//     const {rows, columns} = store.getSize()
 
-    const numberOfCellsToUpdate = Math.floor((rows * columns) * fractionOfCellsToUpdate)
+//     const numberOfCellsToUpdate = Math.floor((rows * columns) * fractionOfCellsToUpdate)
 
-    store.updateCells(Array.from({ length: numberOfCellsToUpdate }, () => {
-      const x = Math.floor(Math.random() * rows)
-      const y = Math.floor(Math.random() * columns)
-      const replacement: [[number, number], number] = [[x,y], randomCellValue()]
-      return replacement
-    }))
-  }
+//     store.updateCells(Array.from({ length: numberOfCellsToUpdate }, () => {
+//       const x = Math.floor(Math.random() * rows)
+//       const y = Math.floor(Math.random() * columns)
+//       const replacement: [[number, number], number] = [[x,y], randomCellValue()]
+//       return replacement
+//     }))
+//   }
 
-  const recursiveTimeout = () => {
-    timeoutId = setTimeout(() => {
-      callback()
+//   const recursiveTimeout = () => {
+//     timeoutId = setTimeout(() => {
+//       callback()
       
-      recursiveTimeout()
-    }, updateFrequencyMs)
-  }
+//       recursiveTimeout()
+//     }, updateFrequencyMs)
+//   }
 
-  recursiveTimeout()
+//   recursiveTimeout()
 
-  return () => clearTimeout(timeoutId)
-}
+//   return () => clearTimeout(timeoutId)
+// }
 

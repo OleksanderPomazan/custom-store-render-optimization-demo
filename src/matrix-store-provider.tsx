@@ -1,5 +1,5 @@
 import {  ReactNode, createContext, useEffect } from "react"
-import { MatrixStore, UpdatesScheduleOptions, scheduleStoreUpdates } from "./matrix-store"
+import { MatrixStore, UpdatesScheduleOptions } from "./matrix-store"
 
 export const MatrixStoreContext = createContext<MatrixStore | null>(null)
 
@@ -16,7 +16,7 @@ export const MatrixStoreProvider = (props: Props) => {
     children = null
   } = props
 
-  useEffect(() => scheduleStoreUpdates(store, { fractionOfCellsToUpdate, updateFrequencyMs }), [store, fractionOfCellsToUpdate, updateFrequencyMs])
+  // useEffect(() => scheduleStoreUpdates(store, { fractionOfCellsToUpdate, updateFrequencyMs }), [store, fractionOfCellsToUpdate, updateFrequencyMs])
 
   return (
     <MatrixStoreContext.Provider value={store}>

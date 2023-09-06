@@ -86,16 +86,18 @@ const formatCellValue = (value: number) => {
 const Cell = (props: { x: number; y: number }) => {
   const { x, y } = props;
 
-  const value = useMatrixCellValue(x, y);
+  const [r,g,b] = useMatrixCellValue(x, y);
 
-  const backgroundColor = getBackgroundColor(value);
-  const color = foregroundColorsMap[backgroundColor] ?? FALLBACK_COLOR
+  // const backgroundColor = getBackgroundColor(value);
+  // const color = foregroundColorsMap[backgroundColor] ?? FALLBACK_COLOR
   
-  const cssVars = { "--backgroundColor": backgroundColor, "--color": color } as CSSProperties;
+  const cssVars = { "--backgroundColor": `rgb(${r}, ${g}, ${b})` } as CSSProperties;
 
   return (
-    <span className="cell" style={cssVars}>
-      {formatCellValue(value)}
+    <span className="cell-wrapper" style={cssVars}>
+    <span className="cell" >
+      {/* {formatCellValue(value)} */}
+    </span>
     </span>
   );
 };
